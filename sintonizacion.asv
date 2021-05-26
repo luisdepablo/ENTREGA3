@@ -349,7 +349,7 @@ saveas(gcf,'img/curvasTs2.png')
 % 5 primeras
 
 
-for i=1:6
+for 
     
 zeta=tupla_xls(index2,1);
 beta=8.6;
@@ -359,7 +359,5 @@ figure(6)
     H=(K*Kp*tau_d1*(s^2+s/tau_d1+1/(tau_d1*tau_i)))/(s^3+K*Kp*tau_d1*(s^2+s/tau_d1+1/(tau_d1*tau_i)));
     [x,t]=step(H);
     plot(t,x,'LineWidth',1.5);
-    
-end
 
 
