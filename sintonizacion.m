@@ -113,13 +113,12 @@ v=0.02;
 Mp_des=1.115;
 beta2=0.5;
 betas=0:0.02:36;
-zetas=0.1:0.1:2;
+zetas=0.2:0.2:2;
 L=length(betas);
 
 beta_xls=[];
 n=0;
 
-figure(1);
 hold on;
 for zeta=zetas
     tmp=[];
@@ -165,7 +164,7 @@ index2=0;
 hold on;
 
 
-tuplas_xls=[];
+
 
 for i=1:(length(zetas))
     
@@ -194,7 +193,7 @@ for i=1:(length(zetas))
             tupla_xls(index2,3)=tupla;
 
            
-            Legend{index}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta{2}=',num2str(tupla));
+            Legend{index}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta_{2}=',num2str(tupla));
             plot(betas2,tmp,'LineWidth',1.5);
         end
         
@@ -229,7 +228,7 @@ for i=1:(length(zetas))
             tupla_xls(index2,2)=beta;
             tupla_xls(index2,3)=tupla;
             
-            Legend{index}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta{2}=',num2str(tupla));
+            Legend{index}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta_{2}=',num2str(tupla));
             plot(betas2,tmp,'LineWidth',1.5);
         end
     
@@ -243,10 +242,10 @@ title('Curvas de t{s}')
 plot(betas2,ones(L,1)*ts_max,'k--','LineWidth',1.2);
 Legend{index+1}=strcat('t{s}');
 legend(Legend,'FontSize',10);
-xlabel('\beta{2}');
+xlabel('\beta_{2}');
 ylabel('t{s}');
 hold off;
-saveas(gcf,'img/curvasTs.fig')
+saveas(gcf,'img/curvasTs1.fig')
 saveas(gcf,'img/curvasTs1.png')
 
 %% Calculo de ts
@@ -295,7 +294,7 @@ for i=1:(length(zetas))
             tupla_xls(index2,3)=tupla;
 
            
-            Legend{index}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta{2}=',num2str(tupla));
+            Legend{index}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta_{2}=',num2str(tupla));
             plot(betas2,tmp,'LineWidth',1.5);
         end
         
@@ -323,7 +322,7 @@ for i=1:(length(zetas))
             tupla_xls(index2,2)=beta;
             tupla_xls(index2,3)=tupla;
             
-            Legend{index}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta{2}=',num2str(tupla));
+            Legend{index}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta_{2}=',num2str(tupla));
             plot(betas2,tmp,'LineWidth',1.5);
         end
         
@@ -338,7 +337,7 @@ title('Curvas de t{s}')
 plot(betas2,ones(L,1)*ts_max,'k--','LineWidth',1.2);
 Legend{index+1}=strcat('t_{s}max');
 legend(Legend,'FontSize',10);
-xlabel('\beta{2}');
+xlabel('\beta_{2}');
 ylabel('t{s}');
 hold off;
 saveas(gcf,'img/curvasTs2.fig')
@@ -347,19 +346,161 @@ saveas(gcf,'img/curvasTs2.png')
 
 %% respuesta al escalon
 % 5 primeras
+figure(5)
+Legend=cell(5,1);
+hold on;
 
-
-for i=1:6
+for i=1:5
     
-zeta=tupla_xls(index2,1);
-beta=8.6;
-beta2=22.78;
-figure(6)
+zeta=tupla_xls(i,1);
+beta=tupla_xls(i,2);
+beta2=tupla_xls(i,3);
+
     [tau_d1,tau_d2,tau_d,tau_i,Kp]=trans_param(p,K,beta,beta2,zeta);
     H=(K*Kp*tau_d1*(s^2+s/tau_d1+1/(tau_d1*tau_i)))/(s^3+K*Kp*tau_d1*(s^2+s/tau_d1+1/(tau_d1*tau_i)));
     [x,t]=step(H);
+    Legend{i}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta_{2}=',num2str(beta2));
     plot(t,x,'LineWidth',1.5);
     
 end
+
+L=length(t);
+
+title('Respuesta al escalón')
+plot(t,ones(L,1)*(1+v),'k--','LineWidth',1.2);
+plot(t,ones(L,1)*(1-v),'k--','LineWidth',1.2);
+xline(0.5);
+xline(0.3);
+%plot(t,ones(L,1)*ts_max,'k--','LineWidth',1.2);
+
+legend(Legend,'FontSize',10);
+xlabel('t(s)');
+ylabel('y(t)');
+hold off;
+saveas(gcf,'img/respuestas1.fig')
+saveas(gcf,'img/respuestas1.png')
+
+
+
+%% respuesta al escalon
+%6 a 10 
+figure(6)
+Legend=cell(5,1);
+hold on;
+index=0;
+for i=6:10
+    index=index+1;
+    
+zeta=tupla_xls(i,1);
+beta=tupla_xls(i,2);
+beta2=tupla_xls(i,3);
+
+    [tau_d1,tau_d2,tau_d,tau_i,Kp]=trans_param(p,K,beta,beta2,zeta);
+    H=(K*Kp*tau_d1*(s^2+s/tau_d1+1/(tau_d1*tau_i)))/(s^3+K*Kp*tau_d1*(s^2+s/tau_d1+1/(tau_d1*tau_i)));
+    [x,t]=step(H);
+    Legend{index}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta_{2}=',num2str(beta2));
+    plot(t,x,'LineWidth',1.5);
+    
+end
+
+L=length(t);
+
+title('Respuesta al escalón')
+plot(t,ones(L,1)*(1+v),'k--','LineWidth',1);
+plot(t,ones(L,1)*(1-v),'k--','LineWidth',1);
+xline(0.5);
+xline(0.3);
+%plot(t,ones(L,1)*ts_max,'k--','LineWidth',1.2);
+
+legend(Legend,'FontSize',10);
+xlabel('t(s)');
+ylabel('y(t)');
+
+hold off;
+saveas(gcf,'img/respuestas2.fig')
+saveas(gcf,'img/respuestas2.png')
+
+
+
+
+%% respuesta al escalon
+%11 a 15 
+figure(7)
+Legend=cell(5,1);
+hold on;
+index=0;
+for i=11:15
+    index=index+1;
+    
+zeta=tupla_xls(i,1);
+beta=tupla_xls(i,2);
+beta2=tupla_xls(i,3);
+
+    [tau_d1,tau_d2,tau_d,tau_i,Kp]=trans_param(p,K,beta,beta2,zeta);
+    H=(K*Kp*tau_d1*(s^2+s/tau_d1+1/(tau_d1*tau_i)))/(s^3+K*Kp*tau_d1*(s^2+s/tau_d1+1/(tau_d1*tau_i)));
+    [x,t]=step(H);
+    Legend{index}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta_{2}=',num2str(beta2));
+    plot(t,x,'LineWidth',1.5);
+    
+end
+
+L=length(t);
+
+title('Respuesta al escalón')
+plot(t,ones(L,1)*(1+v),'k--','LineWidth',1);
+plot(t,ones(L,1)*(1-v),'k--','LineWidth',1);
+xline(0.5);
+xline(0.3);
+%plot(t,ones(L,1)*ts_max,'k--','LineWidth',1.2);
+
+legend(Legend,'FontSize',10);
+xlabel('t(s)');
+ylabel('y(t)');
+hold off;
+saveas(gcf,'img/respuestas2.fig')
+saveas(gcf,'img/respuestas2.png')
+
+%% respuesta al escalon
+% cada grafica por separado
+
+
+
+index=0;
+for i=1:15
+    index=index+1;
+    figure(i);
+zeta=tupla_xls(i,1);
+beta=tupla_xls(i,2);
+beta2=tupla_xls(i,3);
+
+hold on;
+
+    [tau_d1,tau_d2,tau_d,tau_i,Kp]=trans_param(p,K,beta,beta2,zeta);
+    H=(K*Kp*tau_d1*(s^2+s/tau_d1+1/(tau_d1*tau_i)))/(s^3+K*Kp*tau_d1*(s^2+s/tau_d1+1/(tau_d1*tau_i)));
+    [x,t]=step(H);
+    Legend=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta{2}=',num2str(beta2));
+    plot(t,x,'LineWidth',1.5);
+    plot(t,ones(length(t),1)*(1+v),'k--','LineWidth',1.2);
+    plot(t,ones(length(t),1)*(1-v),'k--','LineWidth',1.2);
+    xline(0.5);
+    xline(0.3);
+    yline(1.115);
+    
+    legend(Legend);
+hold off;
+    
+end
+
+L=length(t);
+
+%plot(t,ones(L,1)*ts_max,'k--','LineWidth',1.2);
+
+
+
+xlabel('t(s)');
+ylabel('y(t)');
+
+
+
 
 
