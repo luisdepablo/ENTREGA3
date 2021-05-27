@@ -375,8 +375,10 @@ L=length(t);
 title('Respuesta al escalón')
 plot(t,ones(L,1)*(1+v),'k--','LineWidth',1.2);
 plot(t,ones(L,1)*(1-v),'k--','LineWidth',1.2);
-xline(0.5,'-','t_{s}Max');
-xline(0.3,'-','t_{r}Max');
+xl_ts=xline(0.5,'-','t_{s}Max');
+xl_tr=xline(0.3,'-','t_{r}Max');
+xl_ts.LabelOrientation='horizontal';
+xl_tr.LabelOrientation='horizontal';
 %plot(t,ones(L,1)*ts_max,'k--','LineWidth',1.2);
 
 legend(Legend,'FontSize',10);
@@ -414,8 +416,10 @@ L=length(t);
 title('Respuesta al escalón')
 plot(t,ones(L,1)*(1+v),'k--','LineWidth',1);
 plot(t,ones(L,1)*(1-v),'k--','LineWidth',1);
-xline(0.5,'-','t_{s}Max');
-xline(0.3,'-','t_{r}Max');
+xl_ts=xline(0.5,'-','t_{s}Max');
+xl_tr=xline(0.3,'-','t_{r}Max');
+xl_ts.LabelOrientation='horizontal';
+xl_tr.LabelOrientation='horizontal';
 %plot(t,ones(L,1)*ts_max,'k--','LineWidth',1.2);
 
 legend(Legend,'FontSize',10);
@@ -456,8 +460,10 @@ L=length(t);
 title('Respuesta al escalón')
 plot(t,ones(L,1)*(1+v),'k--','LineWidth',1);
 plot(t,ones(L,1)*(1-v),'k--','LineWidth',1);
-xline(0.5,'-','t_{s}Max');
-xline(0.3,'-','t_{r}Max');
+xl_ts=xline(0.5,'-','t_{s}Max');
+xl_tr=xline(0.3,'-','t_{r}Max');
+xl_ts.LabelOrientation='horizontal';
+xl_tr.LabelOrientation='horizontal';
 %plot(t,ones(L,1)*ts_max,'k--','LineWidth',1.2);
 
 legend(Legend,'FontSize',10);
@@ -470,7 +476,8 @@ saveas(gcf,'img/respuestas2.png')
 %% respuesta al escalon
 % cada grafica por separado
 
-
+load tuplas.csv
+tupla_xls=tuplas;
 
 index=0;
 for i=1:15
@@ -489,9 +496,11 @@ hold on;
     plot(t,x,'LineWidth',1.5);
     plot(t,ones(length(t),1)*(1+v),'k--','LineWidth',1.2);
     plot(t,ones(length(t),1)*(1-v),'k--','LineWidth',1.2);
-    xline(0.5);
-    xline(0.3);
-    yline(1.115);
+    xl_ts=xline(0.5,'-','t_{s}Max');
+    xl_tr=xline(0.3,'-','t_{r}Max');
+    yline(1.115,'-','M_{p}Max');
+    xl_ts.LabelOrientation='horizontal';
+    xl_tr.LabelOrientation='horizontal';
     
     legend(Legend);
 hold off;
@@ -503,11 +512,50 @@ L=length(t);
 %plot(t,ones(L,1)*ts_max,'k--','LineWidth',1.2);
 
 
-
+title('Respuesta al escalón')
 xlabel('t(s)');
 ylabel('y(t)');
 
 
+%% respuesta al escalon
+% solo para tupla selecciona para punto 3
 
+load tuplas.csv
+tupla_xls=tuplas;
+
+
+%tupla(n,i) n=2-> zeta=0.4 n=3-> zeta=0.6
+   
+    figure(1);
+zeta=tupla_xls(2,1);
+beta=tupla_xls(2,2);
+beta2=tupla_xls(2,3);
+hold on;
+
+    [tau_d1,tau_d2,tau_d,tau_i,Kp]=trans_param(p,K,beta,beta2,zeta);
+    H=(K*Kp*tau_d1*(s^2+s/tau_d1+1/(tau_d1*tau_i)))/(s^3+K*Kp*tau_d1*(s^2+s/tau_d1+1/(tau_d1*tau_i)));
+    [x,t]=step(H);
+    Legend=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta{2}=',num2str(beta2));
+    plot(t,x,'LineWidth',1.5);
+    plot(t,ones(length(t),1)*(1+v),'k--','LineWidth',1.2);
+    plot(t,ones(length(t),1)*(1-v),'k--','LineWidth',1.2);
+    xl_ts=xline(0.5,'-','t_{s}Max');
+    xl_tr=xline(0.3,'-','t_{r}Max');
+    yline(1.115,'-','M_{p}Max');
+    xl_ts.LabelOrientation='horizontal';
+    xl_tr.LabelOrientation='horizontal';
+hold off;
+    
+    legend(Legend);
+
+    
+
+
+
+
+
+title('Respuesta al escalón')
+xlabel('t(s)');
+ylabel('y(t)');
 
 
