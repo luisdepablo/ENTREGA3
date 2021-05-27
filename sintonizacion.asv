@@ -193,7 +193,7 @@ for i=1:(length(zetas))
             tupla_xls(index2,3)=tupla;
 
            
-            Legend{index}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta{2}=',num2str(tupla));
+            Legend{index}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta_{2}=',num2str(tupla));
             plot(betas2,tmp,'LineWidth',1.5);
         end
         
@@ -228,7 +228,7 @@ for i=1:(length(zetas))
             tupla_xls(index2,2)=beta;
             tupla_xls(index2,3)=tupla;
             
-            Legend{index}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta{2}=',num2str(tupla));
+            Legend{index}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta_{2}=',num2str(tupla));
             plot(betas2,tmp,'LineWidth',1.5);
         end
     
@@ -242,7 +242,7 @@ title('Curvas de t{s}')
 plot(betas2,ones(L,1)*ts_max,'k--','LineWidth',1.2);
 Legend{index+1}=strcat('t{s}');
 legend(Legend,'FontSize',10);
-xlabel('\beta{2}');
+xlabel('\beta_{2}');
 ylabel('t{s}');
 hold off;
 saveas(gcf,'img/curvasTs1.fig')
@@ -294,7 +294,7 @@ for i=1:(length(zetas))
             tupla_xls(index2,3)=tupla;
 
            
-            Legend{index}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta{2}=',num2str(tupla));
+            Legend{index}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta_{2}=',num2str(tupla));
             plot(betas2,tmp,'LineWidth',1.5);
         end
         
@@ -322,7 +322,7 @@ for i=1:(length(zetas))
             tupla_xls(index2,2)=beta;
             tupla_xls(index2,3)=tupla;
             
-            Legend{index}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta{2}=',num2str(tupla));
+            Legend{index}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta_{2}=',num2str(tupla));
             plot(betas2,tmp,'LineWidth',1.5);
         end
         
@@ -348,6 +348,12 @@ saveas(gcf,'img/curvasTs2.png')
 % 5 primeras
 figure(5)
 Legend=cell(5,1);
+load tuplas.csv
+load betas.csv
+tupla_xls=tuplas;
+beta_xls=betas;
+t=0:0.01:1.5;
+v=0.02;
 hold on;
 
 for i=1:5
@@ -358,7 +364,7 @@ beta2=tupla_xls(i,3);
 
     [tau_d1,tau_d2,tau_d,tau_i,Kp]=trans_param(p,K,beta,beta2,zeta);
     H=(K*Kp*tau_d1*(s^2+s/tau_d1+1/(tau_d1*tau_i)))/(s^3+K*Kp*tau_d1*(s^2+s/tau_d1+1/(tau_d1*tau_i)));
-    [x,t]=step(H);
+    x=step(H,t);
     Legend{i}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta_{2}=',num2str(beta2));
     plot(t,x,'LineWidth',1.5);
     
@@ -388,6 +394,7 @@ figure(6)
 Legend=cell(5,1);
 hold on;
 index=0;
+t=0:0.01:1.5;
 for i=6:10
     index=index+1;
     

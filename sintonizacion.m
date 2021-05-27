@@ -147,8 +147,8 @@ xlswrite(filename,beta_xls);
 %para zetas entre 0.2 y 1
 
 v=0.02;
-
-
+load betas.csv
+beta_xls=betas;
 
 Legend=cell(6,1);
 betas2=0.1:0.02:30;
@@ -348,6 +348,12 @@ saveas(gcf,'img/curvasTs2.png')
 % 5 primeras
 figure(5)
 Legend=cell(5,1);
+load tuplas.csv
+load betas.csv
+tupla_xls=tuplas;
+beta_xls=betas;
+t=0:0.001:1.0;
+v=0.02;
 hold on;
 
 for i=1:5
@@ -358,9 +364,9 @@ beta2=tupla_xls(i,3);
 
     [tau_d1,tau_d2,tau_d,tau_i,Kp]=trans_param(p,K,beta,beta2,zeta);
     H=(K*Kp*tau_d1*(s^2+s/tau_d1+1/(tau_d1*tau_i)))/(s^3+K*Kp*tau_d1*(s^2+s/tau_d1+1/(tau_d1*tau_i)));
-    [x,t]=step(H);
+    x=step(H,t);
     Legend{i}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta_{2}=',num2str(beta2));
-    plot(t,x,'LineWidth',1.5);
+    plot(t,x,'LineWidth',1);
     
 end
 
@@ -369,8 +375,8 @@ L=length(t);
 title('Respuesta al escalón')
 plot(t,ones(L,1)*(1+v),'k--','LineWidth',1.2);
 plot(t,ones(L,1)*(1-v),'k--','LineWidth',1.2);
-xline(0.5);
-xline(0.3);
+xline(0.5,'-','t_{s}Max');
+xline(0.3,'-','t_{r}Max');
 %plot(t,ones(L,1)*ts_max,'k--','LineWidth',1.2);
 
 legend(Legend,'FontSize',10);
@@ -388,6 +394,7 @@ figure(6)
 Legend=cell(5,1);
 hold on;
 index=0;
+t=0:0.001:1.5;
 for i=6:10
     index=index+1;
     
@@ -397,10 +404,9 @@ beta2=tupla_xls(i,3);
 
     [tau_d1,tau_d2,tau_d,tau_i,Kp]=trans_param(p,K,beta,beta2,zeta);
     H=(K*Kp*tau_d1*(s^2+s/tau_d1+1/(tau_d1*tau_i)))/(s^3+K*Kp*tau_d1*(s^2+s/tau_d1+1/(tau_d1*tau_i)));
-    [x,t]=step(H);
+    [x]=step(H,t);
     Legend{index}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta_{2}=',num2str(beta2));
-    plot(t,x,'LineWidth',1.5);
-    
+    plot(t,x,'LineWidth',1);    
 end
 
 L=length(t);
@@ -408,8 +414,8 @@ L=length(t);
 title('Respuesta al escalón')
 plot(t,ones(L,1)*(1+v),'k--','LineWidth',1);
 plot(t,ones(L,1)*(1-v),'k--','LineWidth',1);
-xline(0.5);
-xline(0.3);
+xline(0.5,'-','t_{s}Max');
+xline(0.3,'-','t_{r}Max');
 %plot(t,ones(L,1)*ts_max,'k--','LineWidth',1.2);
 
 legend(Legend,'FontSize',10);
@@ -427,6 +433,7 @@ saveas(gcf,'img/respuestas2.png')
 %11 a 15 
 figure(7)
 Legend=cell(5,1);
+t=0:0.001:1;
 hold on;
 index=0;
 for i=11:15
@@ -438,9 +445,9 @@ beta2=tupla_xls(i,3);
 
     [tau_d1,tau_d2,tau_d,tau_i,Kp]=trans_param(p,K,beta,beta2,zeta);
     H=(K*Kp*tau_d1*(s^2+s/tau_d1+1/(tau_d1*tau_i)))/(s^3+K*Kp*tau_d1*(s^2+s/tau_d1+1/(tau_d1*tau_i)));
-    [x,t]=step(H);
+    [x]=step(H,t);
     Legend{index}=strcat('\zeta=',num2str(zeta),', \beta=',num2str(beta),' \beta_{2}=',num2str(beta2));
-    plot(t,x,'LineWidth',1.5);
+    plot(t,x,'LineWidth',1);
     
 end
 
@@ -449,8 +456,8 @@ L=length(t);
 title('Respuesta al escalón')
 plot(t,ones(L,1)*(1+v),'k--','LineWidth',1);
 plot(t,ones(L,1)*(1-v),'k--','LineWidth',1);
-xline(0.5);
-xline(0.3);
+xline(0.5,'-','t_{s}Max');
+xline(0.3,'-','t_{r}Max');
 %plot(t,ones(L,1)*ts_max,'k--','LineWidth',1.2);
 
 legend(Legend,'FontSize',10);
